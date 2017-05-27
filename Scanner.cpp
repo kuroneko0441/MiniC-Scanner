@@ -1,7 +1,7 @@
 #include "Scanner.h"
 #include <iostream>
 
-Scanner::Scanner(std::string fileName):fileName(fileName), lineNum(1), colNum(0) {
+Scanner::Scanner(std::string fileName):fileName(fileName), lineNum(1), colNum(0), lastCol(0) {
 	//open file
 	file.open(fileName);
 }
@@ -54,12 +54,16 @@ bool Scanner::isDigit(char letter) {
 }
 
 int Scanner::hexValue(char hex) {
+	//'0' ~ '9'
 	if(isDigit(hex))
 		return hex - '0';
+	//'a' ~ 'f'
 	if(hex >= 'a' && hex <= 'f')
 		return hex - 'a';
+	//'A' ~ 'F'
 	if(hex >= 'A'&&hex <= 'F')
 		return hex - 'A';
+	//error (not hex value)
 	return -1;
 }
 
@@ -79,7 +83,9 @@ char Scanner::getChar() {
 }
 
 void Scanner::ungetChar() {
+	//restore colNum & lineNum
 	if(colNum == 1) {
+		//if newline entered
 		colNum = lastCol;
 		lineNum--;
 	} else {
@@ -89,16 +95,18 @@ void Scanner::ungetChar() {
 }
 
 Token Scanner::scanToken() {
-	int index;
-	char c;
-	std::string input;
 	Token token;
 	token.number = tNull;
 
 	do {
-		// skip spaces
-		while(isspace(c = getChar()));
+		char c = getChar();
 
+		// skip spaces
+		while(isspace(c)) {
+			c = getChar();
+		}
+
+		//set token attributes
 		token.lineNum = lineNum;
 		token.colNum = colNum;
 		token.value = '0';
@@ -106,6 +114,7 @@ Token Scanner::scanToken() {
 		if(isSuperLetter(c)) {
 			// symbols & identifiers
 
+			std::string input;
 			do {
 				input += c;
 				c = getChar();
@@ -113,6 +122,7 @@ Token Scanner::scanToken() {
 			ungetChar();
 
 			// find the identifier in the keyword table
+			int index;
 			for(index = 0; index < KEYWORD_SIZE; index++)
 				if(!input.compare(keywordName[index]))
 					break;
@@ -172,7 +182,7 @@ Token Scanner::scanToken() {
 				}
 
 				if(c == '.') {
-					//double literal
+					// double literal
 					token.number = tDouble;
 
 					c = getChar();
@@ -183,6 +193,7 @@ Token Scanner::scanToken() {
 						num += d;
 					}
 
+					// floating point representation
 					if(c == 'e') {
 						c = getChar();
 						int exp = 0;
@@ -192,6 +203,7 @@ Token Scanner::scanToken() {
 								exp = exp * 10 + (c - '0');
 								c = getChar();
 							}
+							// power 10
 							for(int i = 0; i < exp; i++)
 								num *= 10;
 						} else if(c == '-') {
@@ -200,6 +212,7 @@ Token Scanner::scanToken() {
 								exp = exp * 10 + (c - '0');
 								c = getChar();
 							}
+							// power 0.1
 							for(int i = 0; i < exp; i++)
 								num /= 10;
 						} else if(isDigit(c)) {
@@ -207,6 +220,7 @@ Token Scanner::scanToken() {
 								exp = exp * 10 + (c - '0');
 								c = getChar();
 							}
+							// power 10
 							for(int i = 0; i < exp; i++)
 								num *= 10;
 						} else {
@@ -219,9 +233,9 @@ Token Scanner::scanToken() {
 
 			//convert int to string
 			token.value = std::to_string(num);
-			
+
 			//check Integer
-			if(token.number==tInteger)
+			if(token.number == tInteger)
 				token.value = std::to_string(static_cast<int>(num));
 
 			ungetChar();
@@ -465,6 +479,7 @@ Token Scanner::scanToken() {
 
 void Scanner::scanAll() {
 	Token token;
+	// scan until file ends
 	while((token = scanToken()).number != tEOF) {
 		printToken(token);
 	}
