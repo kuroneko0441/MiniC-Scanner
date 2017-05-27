@@ -1,7 +1,7 @@
 #include "Scanner.h"
 #include <iostream>
 
-Scanner::Scanner(std::string fileName):fileName(fileName) {
+Scanner::Scanner(std::string fileName):fileName(fileName), lineNum(1), colNum(0) {
 	//open file
 	file.open(fileName);
 }
@@ -47,9 +47,9 @@ char Scanner::getChar() {
 	if(c == '\n') {
 		//save & reset colNum, add lineNum
 		lastCol = colNum;
-		colNum = 1;
+		colNum = 0;
 		lineNum++;
-	} else if(isspace(c)) {
+	} else {
 		//add lineNum
 		colNum++;
 	}
@@ -79,6 +79,8 @@ Token Scanner::scanToken() {
 
 		token.lineNum = lineNum;
 		token.colNum = colNum;
+		token.id = c;
+		token.value = '0';
 
 		if(isSuperLetter(c)) {
 			// symbols & identifiers
