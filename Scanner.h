@@ -49,19 +49,19 @@ private:
 		"for","while","do","goto","switch","case","break","default",
 		"return"
 	};
-	const char* keyword[KEYWORD_SIZE] = {
-		"const",
-		"void","char","int","double",
-		"if","else",
-		"for","while","do","goto","switch","case","break","default",
-		"return"
-	};
-	Symbol keywordNum[KEYWORD_SIZE] = {
+	Symbol keyword[KEYWORD_SIZE] = {
 		tconst,
 		tvoid, tchar, tint, tdouble,
 		tif, telse,
 		tfor, twhile, tdo, tgoto, tswitch, tcase, tbreak, tdefault,
 		treturn
+	};
+	const char* keywordName[KEYWORD_SIZE] = {
+		"const",
+		"void","char","int","double",
+		"if","else",
+		"for","while","do","goto","switch","case","break","default",
+		"return"
 	};
 
 private:

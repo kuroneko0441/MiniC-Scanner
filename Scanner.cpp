@@ -114,10 +114,10 @@ Token Scanner::scanToken() {
 
 			// find the identifier in the keyword table
 			for(index = 0; index < KEYWORD_SIZE; index++)
-				if(!input.compare(keyword[index]))
+				if(!input.compare(keywordName[index]))
 					break;
 			if(index < KEYWORD_SIZE) {	// found, keyword exit
-				token.number = keywordNum[index];
+				token.number = keyword[index];
 			} else {					// not found, identifier exit
 				token.number = tIdentifier;
 				token.value = input;
