@@ -66,6 +66,47 @@ void Scanner::ungetChar() {
 	file.unget();
 }
 
+Token Scanner::scanToken() {
+	int index;
+	char c;
+	std::string input;
+	Token token;
+	token.number = tNull;
+
+	do {
+		// skip spaces
+		while(isspace(c = getChar()));
+
+		token.lineNum = lineNum;
+		token.colNum = colNum;
+		
+		if(isSuperLetter(c)) {
+			// symbols & identifiers
+			
+		}else if(c=='\'') {
+			// character literal
+			
+		}else if(isDigit(c)) {
+			// integer & double literal
+			
+		}else if(c=='\"') {
+			// string literal
+			
+		}else {
+			// operators
+			switch(c) {
+			case EOF:
+				token.number = tEOF;
+				return token;
+				default: break;
+			}
+		}
+
+	} while(token.number == tNull);
+
+	return token;
+}
+
 void Scanner::scanAll() {
 	Token token;
 	while((token = scanToken()).number != tEOF) {
