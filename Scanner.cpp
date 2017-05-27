@@ -21,6 +21,10 @@ void Scanner::printError(int errorCode) {
 		//|| error
 		std::cout << "next character must be |\n";
 		break;
+	case 3:
+		//|| error
+		std::cout << "next character must be \'\n";
+		break;
 	default: break;
 	}
 }
@@ -88,6 +92,21 @@ Token Scanner::scanToken() {
 		} else if(c == '\'') {
 			// character literal
 
+			token.number = tCharacter;
+			c = getChar();
+			token.id = symbolName[token.number];
+			token.value = c;
+			
+			// escape character
+			if(c == '\\') 
+				token.value += getChar();
+
+			// error
+			if(getChar() != '\'') {
+				printError(3);
+				ungetChar();
+				token.number = tNull;
+			}
 		} else if(isDigit(c)) {
 			// integer & double literal
 
