@@ -65,3 +65,10 @@ void Scanner::ungetChar() {
 	}
 	file.unget();
 }
+
+void Scanner::scanAll() {
+	Token token;
+	while((token = scanToken()).number != tEOF) {
+		printToken(token);
+	}
+}
