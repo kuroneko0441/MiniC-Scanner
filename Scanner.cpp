@@ -40,3 +40,28 @@ bool Scanner::isDigit(char letter) {
 	//'0' ~ '9'
 	return letter >= '0' && letter <= '9';
 }
+
+char Scanner::getChar() {
+	//get character from file
+	char c = file.get();
+	if(c == '\n') {
+		//save & reset colNum, add lineNum
+		lastCol = colNum;
+		colNum = 1;
+		lineNum++;
+	} else if(isspace(c)) {
+		//add lineNum
+		colNum++;
+	}
+	return c;
+}
+
+void Scanner::ungetChar() {
+	if(colNum == 1) {
+		colNum = lastCol;
+		lineNum--;
+	} else {
+		colNum--;
+	}
+	file.unget();
+}
