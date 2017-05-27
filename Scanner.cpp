@@ -219,6 +219,11 @@ Token Scanner::scanToken() {
 
 			//convert int to string
 			token.value = std::to_string(num);
+			
+			//check Integer
+			if(token.number==tInteger)
+				token.value = std::to_string(static_cast<int>(num));
+
 			ungetChar();
 		} else if(c == '\"') {
 			// string literal
