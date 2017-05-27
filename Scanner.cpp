@@ -137,9 +137,177 @@ Token Scanner::scanToken() {
 				}
 				break;
 			}
+			case '!':
+			{
+				c = getChar();
+				if(c == '=') {
+					token.number = tNotequal;
+					token.id += '=';
+				} else {
+					token.number = tNot;
+					ungetChar();
+				}
+				break;
+			}
+			case '%':
+			{
+				c = getChar();
+				if(c == '=') {
+					token.number = tRemaiderAssign;
+					token.id += '=';
+				} else {
+					token.number = tRemainder;
+					ungetChar();
+				}
+				break;
+			}
+			case '&':
+			{
+				c = getChar();
+				if(c == '&') {
+					token.number = tAnd;
+					token.id += '&';
+				} else {
+					printError(1);
+					ungetChar();
+				}
+				break;
+			}
+			case '*':
+			{
+				c = getChar();
+				if(c == '=') {
+					token.number = tMuliplyAssign;
+					token.id += '=';
+				} else {
+					token.number = tMuliply;
+					ungetChar();
+				}
+				break;
+			}
+			case '+':
+			{
+
+				c = getChar();
+				if(c == '=') {
+					token.number = tPlusAssign;
+					token.id += '=';
+				} else {
+					token.number = tPlus;
+					ungetChar();
+				}
+				break;
+			}
+			case '-':
+			{
+
+				c = getChar();
+				if(c == '=') {
+					token.number = tMinusAssign;
+					token.id += '=';
+				} else {
+					token.number = tMinus;
+					ungetChar();
+				}
+			}
+			case '<':
+			{
+				c = getChar();
+				if(c == '=') {
+					token.number = tLessEqual;
+					token.id += '=';
+				} else {
+					token.number = tLess;
+					ungetChar();
+				}
+				break;
+			}
+			case '=':
+			{
+				c = getChar();
+				if(c == '=') {
+					token.number = tEqual;
+					token.id += '=';
+				} else {
+					token.number = tAssign;
+					ungetChar();
+				}
+				break;
+			}
+			case '>':
+			{
+				c = getChar();
+				if(c == '=') {
+					token.number = tGreatEqual;
+					token.id += '=';
+				} else {
+					token.number = tGreat;
+					ungetChar();
+				}
+				break;
+			}
+			case '|':
+			{
+				c = getChar();
+				if(c == '|') {
+					token.number = tOr;
+					token.id += '|';
+				} else {
+					printError(2);
+					ungetChar();
+				}
+				break;
+			}
+			case '(':
+			{
+				token.number = tLeftParen;
+				break;
+			}
+			case ')':
+			{
+				token.number = tRightParen;
+				break;
+			}
+			case ',':
+			{
+				token.number = tComma;
+				break;
+			}
+			case ':':
+			{
+				token.number = tColon;
+				break;
+			}
+			case ';':
+			{
+				token.number = tSemicolon;
+				break;
+			}
+			case '[':
+			{
+				token.number = tLeftBracket;
+				break;
+			}
+			case ']':
+			{
+				token.number = tRightBracket;
+				break;
+			}
+			case '{':
+			{
+				token.number = tlbrace;
+				break;
+			}
+			case '}':
+			{
+				token.number = trbrace;
+				break;
+			}
 			case EOF:
+			{
 				token.number = tEOF;
 				return token;
+			}
 			default: break;
 			}
 		}
