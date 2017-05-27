@@ -25,6 +25,10 @@ void Scanner::printError(int errorCode) {
 		//|| error
 		std::cout << "next character must be \'\n";
 		break;
+	case 4:
+		//|| error
+		std::cout << "string must be end in line \n";
+		break;
 	default: break;
 	}
 }
@@ -113,6 +117,29 @@ Token Scanner::scanToken() {
 		} else if(c == '\"') {
 			// string literal
 
+			token.number = tString;
+			token.id = symbolName[token.number];
+			token.value = "";
+
+			do {
+				c = getChar();
+				token.value += c;
+
+				// escape character
+				if(c == '\\')
+					token.value += getChar();
+
+				// string not end error
+				if(c == '\n') {
+					printError(4);
+					ungetChar();
+					token.number = tNull;
+					break;
+				}
+			} while(c != '\"');
+
+			// delete last "
+			token.value.pop_back();
 		} else {
 			// operators
 			switch(c) {
