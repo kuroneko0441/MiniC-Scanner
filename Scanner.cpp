@@ -30,3 +30,13 @@ void Scanner::printToken(Token t) {
 	std::cout << "(" << t.number << ", " << t.value << ", " << fileName << ", " << t.lineNum << ", " << t.colNum << ")";
 	std::cout << std::endl;
 }
+
+bool Scanner::isSuperLetter(char letter) {
+	//'a' ~ 'z' + '_'
+	return isalpha(letter) || letter == '_';
+}
+
+bool Scanner::isDigit(char letter) {
+	//'0' ~ '9'
+	return letter >= '0' && letter <= '9';
+}
