@@ -88,6 +88,8 @@ private:
 	bool isSuperLetter(char letter);
 	/* returns true if letter is digit ('0' ~ '9') */
 	bool isDigit(char letter);
+	/* get hex value from character, returns -1 if not */
+	int hexValue(char hex);
 	/* read character from file, setting colNum & lineNum */
 	char getChar();
 	/* retract character into file, setting colNum & lineNum */

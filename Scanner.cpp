@@ -49,6 +49,16 @@ bool Scanner::isDigit(char letter) {
 	return letter >= '0' && letter <= '9';
 }
 
+int Scanner::hexValue(char hex) {
+	if(isDigit(hex))
+		return hex - '0';
+	if(hex >= 'a' && hex <= 'f')
+		return hex - 'a';
+	if(hex >= 'A'&&hex <= 'F')
+		return hex - 'A';
+	return -1;
+}
+
 char Scanner::getChar() {
 	//get character from file
 	char c = file.get();
@@ -91,13 +101,13 @@ Token Scanner::scanToken() {
 
 		if(isSuperLetter(c)) {
 			// symbols & identifiers
-			
+
 			do {
 				input += c;
 				c = getChar();
 			} while(isSuperLetter(c) || isDigit(c));
 			ungetChar();
-			
+
 			// find the identifier in the keyword table
 			for(index = 0; index < KEYWORD_SIZE; index++)
 				if(!input.compare(keyword[index]))
@@ -114,9 +124,9 @@ Token Scanner::scanToken() {
 			token.number = tCharacter;
 			c = getChar();
 			token.value = c;
-			
+
 			// escape character
-			if(c == '\\') 
+			if(c == '\\')
 				token.value += getChar();
 
 			// error
@@ -128,6 +138,39 @@ Token Scanner::scanToken() {
 		} else if(isDigit(c)) {
 			// integer & double literal
 
+			token.number = tInteger;
+			int num = 0;
+
+			if(c == '0') {
+				c = getChar();
+				if((c == 'X') || (c == 'x')) {
+					// hexa decima
+					c = getChar();
+					while(hexValue(c) != -1) {
+						num = num * 16 + hexValue(c);
+						c = getChar();
+					}
+				} else if((c >= '0') && (c <= '7')) {
+					// octal
+					while((c >= '0') && (c <= '7')) {
+						num = num * 8 + (c - '0');
+						c = getChar();
+					}
+				} else {
+					// zero
+					token.value = '0';
+				}
+			} else {
+				// decimal
+				while(isdigit(c)) {
+					num = num * 10 + (c - '0');
+					c = getChar();
+				}
+			}
+
+			//convert int to string
+			token.value = std::to_string(num);
+			ungetChar();
 		} else if(c == '\"') {
 			// string literal
 
