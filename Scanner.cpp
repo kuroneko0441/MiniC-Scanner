@@ -34,7 +34,7 @@ void Scanner::printError(int errorCode) {
 }
 
 void Scanner::printToken(Token t) {
-	std::cout << "Token -----> " << t.id << " ";
+	std::cout << "Token -----> " << symbolName[t.number] << " ";
 	std::cout << "(" << t.number << ", " << t.value << ", " << fileName << ", " << t.lineNum << ", " << t.colNum << ")";
 	std::cout << std::endl;
 }
@@ -87,7 +87,6 @@ Token Scanner::scanToken() {
 
 		token.lineNum = lineNum;
 		token.colNum = colNum;
-		token.id = c;
 		token.value = '0';
 
 		if(isSuperLetter(c)) {
@@ -98,7 +97,6 @@ Token Scanner::scanToken() {
 
 			token.number = tCharacter;
 			c = getChar();
-			token.id = symbolName[token.number];
 			token.value = c;
 			
 			// escape character
@@ -118,7 +116,6 @@ Token Scanner::scanToken() {
 			// string literal
 
 			token.number = tString;
-			token.id = symbolName[token.number];
 			token.value = "";
 
 			do {
@@ -188,7 +185,6 @@ Token Scanner::scanToken() {
 				c = getChar();
 				if(c == '=') {
 					token.number = tNotequal;
-					token.id += '=';
 				} else {
 					token.number = tNot;
 					ungetChar();
@@ -200,7 +196,6 @@ Token Scanner::scanToken() {
 				c = getChar();
 				if(c == '=') {
 					token.number = tRemaiderAssign;
-					token.id += '=';
 				} else {
 					token.number = tRemainder;
 					ungetChar();
@@ -212,7 +207,6 @@ Token Scanner::scanToken() {
 				c = getChar();
 				if(c == '&') {
 					token.number = tAnd;
-					token.id += '&';
 				} else {
 					printError(1);
 					ungetChar();
@@ -224,7 +218,6 @@ Token Scanner::scanToken() {
 				c = getChar();
 				if(c == '=') {
 					token.number = tMuliplyAssign;
-					token.id += '=';
 				} else {
 					token.number = tMuliply;
 					ungetChar();
@@ -237,7 +230,6 @@ Token Scanner::scanToken() {
 				c = getChar();
 				if(c == '=') {
 					token.number = tPlusAssign;
-					token.id += '=';
 				} else {
 					token.number = tPlus;
 					ungetChar();
@@ -250,7 +242,6 @@ Token Scanner::scanToken() {
 				c = getChar();
 				if(c == '=') {
 					token.number = tMinusAssign;
-					token.id += '=';
 				} else {
 					token.number = tMinus;
 					ungetChar();
@@ -261,7 +252,6 @@ Token Scanner::scanToken() {
 				c = getChar();
 				if(c == '=') {
 					token.number = tLessEqual;
-					token.id += '=';
 				} else {
 					token.number = tLess;
 					ungetChar();
@@ -273,7 +263,6 @@ Token Scanner::scanToken() {
 				c = getChar();
 				if(c == '=') {
 					token.number = tEqual;
-					token.id += '=';
 				} else {
 					token.number = tAssign;
 					ungetChar();
@@ -285,7 +274,6 @@ Token Scanner::scanToken() {
 				c = getChar();
 				if(c == '=') {
 					token.number = tGreatEqual;
-					token.id += '=';
 				} else {
 					token.number = tGreat;
 					ungetChar();
@@ -297,7 +285,6 @@ Token Scanner::scanToken() {
 				c = getChar();
 				if(c == '|') {
 					token.number = tOr;
-					token.id += '|';
 				} else {
 					printError(2);
 					ungetChar();

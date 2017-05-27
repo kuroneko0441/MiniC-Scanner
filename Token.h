@@ -3,9 +3,6 @@
 
 class Token {
 public:
-	/* token string */
-	std::string id;
-
 	/* token number */
 	int number;
 
