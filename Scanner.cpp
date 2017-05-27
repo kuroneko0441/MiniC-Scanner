@@ -22,12 +22,16 @@ void Scanner::printError(int errorCode) {
 		std::cout << "next character must be |\n";
 		break;
 	case 3:
-		//|| error
+		//' error
 		std::cout << "next character must be \'\n";
 		break;
 	case 4:
-		//|| error
+		//string not in line error
 		std::cout << "string must be end in line \n";
+		break;
+	case 5:
+		//double Integer next e error
+		std::cout << "next character must be Integer\n";
 		break;
 	default: break;
 	}
@@ -139,7 +143,7 @@ Token Scanner::scanToken() {
 			// integer & double literal
 
 			token.number = tInteger;
-			int num = 0;
+			double num = 0;
 
 			if(c == '0') {
 				c = getChar();
@@ -162,9 +166,54 @@ Token Scanner::scanToken() {
 				}
 			} else {
 				// decimal
-				while(isdigit(c)) {
+				while(isDigit(c)) {
 					num = num * 10 + (c - '0');
 					c = getChar();
+				}
+
+				if(c == '.') {
+					//double literal
+					token.number = tDouble;
+
+					c = getChar();
+					for(int exp = 1; isDigit(c); c = getChar(), exp++) {
+						double d = c - '0';
+						for(int i = 0; i < exp; i++)
+							d /= 10;
+						num += d;
+					}
+
+					if(c == 'e') {
+						c = getChar();
+						int exp = 0;
+						if(c == '+') {
+							c = getChar();
+							while(isDigit(c)) {
+								exp = exp * 10 + (c - '0');
+								c = getChar();
+							}
+							for(int i = 0; i < exp; i++)
+								num *= 10;
+						} else if(c == '-') {
+							c = getChar();
+							while(isDigit(c)) {
+								exp = exp * 10 + (c - '0');
+								c = getChar();
+							}
+							for(int i = 0; i < exp; i++)
+								num /= 10;
+						} else if(isDigit(c)) {
+							while(isDigit(c)) {
+								exp = exp * 10 + (c - '0');
+								c = getChar();
+							}
+							for(int i = 0; i < exp; i++)
+								num *= 10;
+						} else {
+							printError(5);
+							token.number = tNull;
+						}
+					}
 				}
 			}
 
