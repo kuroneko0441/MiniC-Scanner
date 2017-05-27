@@ -91,7 +91,23 @@ Token Scanner::scanToken() {
 
 		if(isSuperLetter(c)) {
 			// symbols & identifiers
-
+			
+			do {
+				input += c;
+				c = getChar();
+			} while(isSuperLetter(c) || isDigit(c));
+			ungetChar();
+			
+			// find the identifier in the keyword table
+			for(index = 0; index < KEYWORD_SIZE; index++)
+				if(!input.compare(keyword[index]))
+					break;
+			if(index < KEYWORD_SIZE) {	// found, keyword exit
+				token.number = keywordNum[index];
+			} else {					// not found, identifier exit
+				token.number = tIdentifier;
+				token.value = input;
+			}
 		} else if(c == '\'') {
 			// character literal
 
