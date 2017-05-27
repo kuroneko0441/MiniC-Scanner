@@ -79,26 +79,66 @@ Token Scanner::scanToken() {
 
 		token.lineNum = lineNum;
 		token.colNum = colNum;
-		
+
 		if(isSuperLetter(c)) {
 			// symbols & identifiers
-			
-		}else if(c=='\'') {
+
+		} else if(c == '\'') {
 			// character literal
-			
-		}else if(isDigit(c)) {
+
+		} else if(isDigit(c)) {
 			// integer & double literal
-			
-		}else if(c=='\"') {
+
+		} else if(c == '\"') {
 			// string literal
-			
-		}else {
+
+		} else {
 			// operators
 			switch(c) {
+			case '/':
+			{
+				c = getChar();
+				if(c == '/') {
+					// single-line comment
+					do {
+						c = getChar();
+					} while(c != '\n');
+				} else if(c == '*') {
+					c = getChar();
+					if(c == '*') {
+						// documented comment
+						do {
+							if((c = getChar()) == '*') {
+								if(getChar() == '/')
+									break;
+								ungetChar();
+							}
+							std::cout << c;
+						} while(c != '/');
+					} else {
+						// multi-line comment
+						do {
+							if((c = getChar()) == '*') {
+								if(getChar() == '/')
+									break;
+								ungetChar();
+							}
+						} while(c != '/');
+					}
+				} else if(c == '=') {
+					// /= opertor (divide-assign)
+					token.number = tDivideAssign;
+				} else {
+					// / opertor (divide)
+					token.number = tDivide;
+					ungetChar();
+				}
+				break;
+			}
 			case EOF:
 				token.number = tEOF;
 				return token;
-				default: break;
+			default: break;
 			}
 		}
 
